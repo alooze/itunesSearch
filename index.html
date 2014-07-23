@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jacob Lashley</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <h1>SEARCH iTunes:</h1>
+    <div style='float:left'>
+        <input type='text' id='search' />
+    </div>
+    <div id='processing'></div>
+    <div style='clear:both'></div>
+    <div id='error'></div>
+    <br/>
+    <i>Searching with multiple parameters requires you to sperate them with commas.
+        <a href='#' id='getHelp'>
+            <b>Click to view parameter rules.</b>
+        </a>
+        <br/>Parameter order is as follows term, country, media, entity, attribute, limit, lang, version, explicit
+        <br/>Example: jim jones,ca,,,,5 will return only 5 items with the terms looked up with jim jones in the country of Canada.
+    </i>
+    <br/>
+    <br/>
+    <div id='results'></div>
+</body>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="js/script.js"></script>
+</html>
