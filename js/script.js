@@ -7,34 +7,10 @@ $(document).ready(function () {
         "blockCounter": 0, //counter for the gui of the loading widget
         "blockTimeout": 0, //timer used handling loading widget
         "runBlockTimer": function () {
-            PH.blockTimeout = setTimeout(function () {
-                /*
-                 *Create a block every second until search results are posted.  Event is triggered upon initial key press.  Creates the loading GUI.
-                 */
-                if (PH.blockTimeout !== null) {
-                    var $processing = $('#processing');
-                    /*
-                     * Create 3 blocks then restart until loading is complete to symbolize processing/loading while handling the key presses and ajax loading.
-                     */
-                    if (PH.blockCounter === 3) {
-                        PH.blockCounter = 0;
-                        $processing.html("");
-                    } else {
-                        $processing.append('<div class="square"></div>');
-                        PH.blockCounter++;
-                    }
-                    PH.runBlockTimer();
-                }
-            }, 1000);
+            $('#processing').show();
         },
         "stopBlockTimer": function () {
-            /*
-             *This function will clear the timer for the loading GUI until the timer is triggered again.
-             */
-            clearTimeout(PH.blockTimeout);
-            PH.blockTimeout = null;
-            PH.blockCounter = 0;
-            $('#processing').html("");
+            $('#processing').hide();
         },
         "lookup": function (searchData) {
             /*
@@ -47,7 +23,7 @@ $(document).ready(function () {
             })
                 .done(function (data) {
                     //console.log(data);
-                    var searchResults = "";
+                    var searchResults = "<br><hr>";
                     $('#results').html("");
                     /*
                      *The JSON format was 2 deep... I loop through the initial result then loop that result to get all the content.
@@ -60,12 +36,14 @@ $(document).ready(function () {
                              */
                             searchResults += "<b>" + i + "</b>" + ": <span>" + items + "</span><br/>";
                         });
-                        searchResults += "</div><br/>";
+                        searchResults += "</div><br><hr>";
                     });
+                    // searchResults += "</tbody></table>";
                     /*
                      * We hide old result incase it is not empty, insert new results, fade in to show them, then use the div element to add a css background to give it a zebra effect.
                      */
-                    $('#results').hide().html(searchResults).fadeIn().find('div:odd').css("background-color", "#e0e0e0");
+                    // $('#results').hide().html(searchResults).fadeIn().find('div:odd').css("background-color", "#e0e0e0");
+                    $('#results').hide().html(searchResults).fadeIn();
                 })
                 .fail(function (data) {
                     $("#error").html("<br/>A problem connecting to Apple API has occured! Check your connection to the internet!");
@@ -85,10 +63,11 @@ $(document).ready(function () {
         $("#error").html("");
         $('#results').html("");
 
-        PH.runBlockTimer(); //Start Loading/Processing search GUI widget.
+        
 
         //Check for input value to not to empty
         if (search.length !== 0) {
+            PH.runBlockTimer(); //Start Loading/Processing search GUI widget.
             /*
              * Parameter Order: term, country, media, entity, attribute, limit, lang, version, explicit
              * Split the string via , then load all the parameters into an object to be passed with the ajax call.
@@ -143,6 +122,7 @@ $(document).ready(function () {
             }, 1000);
 
         } else {
+            PH.stopBlockTimer(); //Start Loading/Processing search GUI widget.
             $('#results').html("");
         }
     });
